@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
 import '../core/constants/constants.dart';
 import '../core/extensions/context_extensions.dart';
+import '../features/main/presentation/screens/main_screen.dart';
+import '../features/onboarding/presentation/screens/onboarding_screen.dart';
+import '../features/splash/presentation/screens/splash_screen.dart';
 import 'app_routes.dart';
 
 class AppRouter {
@@ -9,7 +12,12 @@ class AppRouter {
   static Route<dynamic> generateRoute(RouteSettings settings) {
     switch (settings.name) {
       case AppRoutes.initial:
-        return _buildRoute(settings, const _RouteNotFoundScreen());
+      case AppRoutes.splash:
+        return _buildRoute(settings, const SplashScreen());
+      case AppRoutes.onboarding:
+        return _buildRoute(settings, const OnboardingScreen());
+      case AppRoutes.main:
+        return _buildRoute(settings, const MainShellScreen());
       default:
         return _buildRoute(settings, const _RouteNotFoundScreen());
     }
