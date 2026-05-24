@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import '../core/constants/constants.dart';
+import '../core/services/local_storage_service.dart';
 import '../core/utils/utils.dart';
 
 class ThemeProvider extends ChangeNotifier {
@@ -18,6 +19,22 @@ class ThemeProvider extends ChangeNotifier {
   bool get isDarkModeSelected => _themeMode == ThemeMode.dark;
 
   Future<void> loadTheme() async {
+    try {
+      final String? savedTheme = LocalStorageService.instance.getString(
+        AppStorageKeys.themeMode,
+      );
+
+      _themeMode = _themeModeFromString(savedTheme);
+    } catch (error, stackTrace) {
+      AppLogger.error(
+        'Failed to load theme mode',
+        error: error,
+        stackTrace: stackTrace,
+      );
+
+      _themeMode = ThemeMode.system;
+    }
+
     _isInitialized = true;
     notifyListeners();
   }
@@ -27,6 +44,19 @@ class ThemeProvider extends ChangeNotifier {
 
     _themeMode = mode;
     notifyListeners();
+
+    try {
+      await LocalStorageService.instance.setString(
+        AppStorageKeys.themeMode,
+        _themeModeToString(mode),
+      );
+    } catch (error, stackTrace) {
+      AppLogger.error(
+        'Failed to save theme mode',
+        error: error,
+        stackTrace: stackTrace,
+      );
+    }
   }
 
   Future<void> setLightTheme() async {
