@@ -44,16 +44,16 @@ class _SplashScreenState extends State<SplashScreen>
   Future<void> _navigateNext() async {
     await Future<void>.delayed(AppDurations.splashDelay);
 
-    // final bool hasCompletedOnboarding = LocalStorageService.instance
-    //     .hasCompletedOnboarding();
+    final bool hasCompletedOnboarding = LocalStorageService.instance
+        .hasCompletedOnboarding();
 
     if (!mounted) return;
-    NavigationService.instance.pushNamedAndRemoveUntil(AppRoutes.onboarding);
-    // if (hasCompletedOnboarding) {
-    //   NavigationService.instance.pushNamedAndRemoveUntil(AppRoutes.main);
-    // } else {
-    //   NavigationService.instance.pushNamedAndRemoveUntil(AppRoutes.onboarding);
-    // }
+
+    if (hasCompletedOnboarding) {
+      NavigationService.instance.pushNamedAndRemoveUntil(AppRoutes.main);
+    } else {
+      NavigationService.instance.pushNamedAndRemoveUntil(AppRoutes.onboarding);
+    }
   }
 
   @override

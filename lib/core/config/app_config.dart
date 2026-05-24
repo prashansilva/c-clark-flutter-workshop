@@ -40,6 +40,8 @@ class AppConfig {
 
   bool get isDevelopment => environment.isDevelopment;
 
+  bool get isStaging => environment.isStaging;
+
   bool get isProduction => environment.isProduction;
 
   Future<void> init() async {

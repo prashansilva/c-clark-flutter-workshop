@@ -5,7 +5,7 @@ import '../../../../core/extensions/extensions.dart';
 import '../../../../core/services/services.dart';
 import '../../../../core/widgets/app_button.dart';
 import '../../../../routes/app_routes.dart';
-import '../providers/onboarding_provider.dart';
+import '../../../../shared/models/mock_shop_data.dart';
 import '../widgets/onboarding_page_item.dart';
 
 class OnboardingScreen extends StatefulWidget {
@@ -26,33 +26,14 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
   }
 
   Future<void> _finish() async {
-    //await LocalStorageService.instance.setOnboardingCompleted(true);
+    await LocalStorageService.instance.setOnboardingCompleted(true);
     if (!mounted) return;
-    context.pushNamedAndRemoveUntil(AppRoutes.main);
+    context.pushNamedAndRemoveUntil(AppRoutes.login);
   }
 
   @override
   Widget build(BuildContext context) {
-    final List<OnboardingSlide> slides = [
-      OnboardingSlide(
-        title: 'Your Shopping Destination for Everything',
-        description:
-        'Find fashion, furniture, gadgets, and daily essentials in one beautiful mobile store.',
-        image: AppAssets.onboardingGrid,
-      ),
-      OnboardingSlide(
-        title: 'Wishlist to Dream Product, in Just a Few Clicks',
-        description:
-        'Save favorites, compare choices, and come back when the time feels right.',
-        image: AppAssets.onboardingPhone,
-      ),
-      OnboardingSlide(
-        title: 'Swift and Reliable Delivery',
-        description:
-        'Track every order clearly from checkout to your front door.',
-        image: AppAssets.onboardingDelivery,
-      ),
-    ];
+    final slides = MockShopData.onboardingSlides;
 
     return Scaffold(
       body: SafeArea(

@@ -1,4 +1,3 @@
-import 'package:c_clark_workshop/providers/user_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -8,19 +7,17 @@ import '../../../../core/widgets/app_loader.dart';
 import '../../../../core/widgets/app_scaffold.dart';
 import '../../../../core/widgets/app_svg_icon.dart';
 import '../../../../routes/app_routes.dart';
-import '../../domain/entities/category_entity.dart';
-import '../widgets/category_horizontal_list.dart';
-import '../widgets/featured_product_section.dart';
-import '../widgets/home_app_bar.dart';
+import '../../../../shared/widgets/shop_ui.dart';
+import '../../../category/presentation/widgets/category_card.dart';
+import '../../../main/presentation/providers/main_provider.dart';
+import '../../../product/presentation/widgets/product_grid.dart';
 
 class HomeScreen extends StatelessWidget {
   const HomeScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
-    // final MainProvider controller = context.watch<MainProvider>();
-    final UserProvider userProvider = context.watch<UserProvider>();
-    final List<ProductCategory> categories = [];
+    final MainProvider controller = context.watch<MainProvider>();
 
     return AppScaffold(
       safeArea: false,
@@ -35,7 +32,7 @@ class HomeScreen extends StatelessWidget {
         children: [
           Row(
             children: [
-              CircleAvatar(backgroundImage: AssetImage(userProvider.user.avatar)),
+              CircleAvatar(backgroundImage: AssetImage(controller.user.avatar)),
               const SizedBox(width: AppSpacing.md),
               Expanded(
                 child: Column(
@@ -43,7 +40,7 @@ class HomeScreen extends StatelessWidget {
                   children: [
                     Text('Good Morning', style: context.textTheme.bodySmall),
                     Text(
-                      userProvider.user.name,
+                      controller.user.name,
                       style: context.textTheme.titleMedium,
                     ),
                   ],
@@ -111,10 +108,10 @@ class HomeScreen extends StatelessWidget {
             height: 92,
             child: ListView.separated(
               scrollDirection: Axis.horizontal,
-              itemCount: categories.length,
+              itemCount: controller.categories.length,
               separatorBuilder: (_, _) => const SizedBox(width: AppSpacing.md),
               itemBuilder: (context, index) {
-                final category = categories[index];
+                final category = controller.categories[index];
                 return SizedBox(
                   width: 70,
                   child: CategoryChip(
@@ -133,23 +130,23 @@ class HomeScreen extends StatelessWidget {
             actionLabel: 'See All',
             onAction: () => context.pushNamed(AppRoutes.products),
           ),
-          // if (controller.isLoadingProducts && controller.products.isEmpty)
-          //   const SizedBox(
-          //     height: 260,
-          //     child: AppLoader(message: 'Loading products...'),
-          //   )
-          // else ...[
-          //   if (controller.productsError != null) ...[
-          //     Text(
-          //       controller.productsError!,
-          //       style: context.textTheme.bodySmall?.copyWith(
-          //         color: context.colors.primary,
-          //       ),
-          //     ),
-          //     const SizedBox(height: AppSpacing.sm),
-          //   ],
-          //   ProductGrid(products: controller.products),
-          // ],
+          if (controller.isLoadingProducts && controller.products.isEmpty)
+            const SizedBox(
+              height: 260,
+              child: AppLoader(message: 'Loading products...'),
+            )
+          else ...[
+            if (controller.productsError != null) ...[
+              Text(
+                controller.productsError!,
+                style: context.textTheme.bodySmall?.copyWith(
+                  color: context.colors.primary,
+                ),
+              ),
+              const SizedBox(height: AppSpacing.sm),
+            ],
+            ProductGrid(products: controller.products),
+          ],
         ],
       ),
     );
